@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from backend import db
+from uuid import uuid4
 
 
 class Newsletter(db.Model):
@@ -7,7 +8,7 @@ class Newsletter(db.Model):
     subj = db.Column(db.String(256), index=True, unique=True)
 
     def __repr__(self):
-        return '<User %r>' % (self.subj)
+        return '<Newsletter %r>' % (self.subj)
 
 
 class User(db.Model):
@@ -25,5 +26,13 @@ class Url(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     newsletter_id = db.Column(db.Integer, db.ForeignKey('newsletter.id'))
 
+    def __init__(self, uuid=None, url=None):
+        if url is None:
+            url = 'htpp://static_pixel.com'
+        if uuid is None:
+            uuid = uuid4().hex
+        self.url = url
+        self.uuid = uuid
+
     def __repr__(self):
-        return '<UUID %r URL %r>'.format(self.uuid, self.url)
+        return self.url

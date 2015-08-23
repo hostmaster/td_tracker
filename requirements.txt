@@ -5,6 +5,7 @@
 #    pip-compile requirements.in
 #
 Flask-SQLAlchemy==2.0
+Flask-Testing==0.4.2
 flask==0.10.1
 itsdangerous==0.24        # via flask
 jinja2==2.8               # via flask
