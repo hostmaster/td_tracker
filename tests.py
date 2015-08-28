@@ -4,7 +4,7 @@ import unittest
 
 from flask import url_for
 
-from backend import db
+from backend import db, backend
 from backend.test_base import BaseTestCase
 from backend.models import Url
 
@@ -39,6 +39,18 @@ class UrlRedirectTests(BaseTestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.location, _url)
+
+    def test_newsletter_url(self):
+        url = Url()
+        _uuid = url.uuid
+
+        db.session.add(url)
+        db.session.commit()
+
+        response = self.client.get(url_for('redirect_url', uuid=_uuid))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.location, backend.config['EMPTY_GIF'])
 
     def test_url_notfound(self):
         _uuid = '5805614c497c11e58cf83c15c2c43f78'
