@@ -4,9 +4,12 @@ import unittest
 
 from flask import url_for
 
-from backend import db, backend
+from newsletter.url import Redirect
+from newsletter import EMPTY_GIF_URL
+
+from backend import db
 from backend.test_base import BaseTestCase
-from backend.models import Url
+from uuid import uuid4
 
 
 class UrlRedirectTests(BaseTestCase):
@@ -16,9 +19,9 @@ class UrlRedirectTests(BaseTestCase):
         self.assert_200(response)
 
     def test_url_redirected_by_uuid(self):
-        _uuid = '5805614c497c11e58cf83c15c2c43f78'
+        _uuid = uuid4().hex
         _url = 'http://ya.ru'
-        url = Url(uuid=_uuid, url=_url)
+        url = Redirect(uuid=_uuid, url=_url)
         db.session.add(url)
         db.session.commit()
 
@@ -26,14 +29,6 @@ class UrlRedirectTests(BaseTestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.location, _url)
-
-    def test_url_redirected_uuid_generated(self):
-        _url = 'http://goo.gl'
-        url = Url(url=_url)
-        _uuid = url.uuid
-
-        db.session.add(url)
-        db.session.commit()
 
         response = self.client.get(url_for('redirect_url', uuid=_uuid))
 
@@ -41,8 +36,9 @@ class UrlRedirectTests(BaseTestCase):
         self.assertEqual(response.location, _url)
 
     def test_newsletter_url(self):
-        url = Url()
-        _uuid = url.uuid
+        _uuid = uuid4().hex
+        _letter = '11'
+        url = Redirect(uuid=_uuid, letter_id=_letter)
 
         db.session.add(url)
         db.session.commit()
@@ -50,17 +46,10 @@ class UrlRedirectTests(BaseTestCase):
         response = self.client.get(url_for('redirect_url', uuid=_uuid))
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.location, backend.config['EMPTY_GIF'])
+        self.assertEqual(response.location, EMPTY_GIF_URL)
 
     def test_url_notfound(self):
-        _uuid = '5805614c497c11e58cf83c15c2c43f78'
-        _url = 'http://ya.ru'
-        url = Url(uuid=_uuid, url=_url)
-        db.session.add(url)
-        db.session.commit()
-
         response = self.client.get(url_for('redirect_url', uuid='xxx'))
-
         self.assertRedirects(response, url_for('notfound'))
 
 if __name__ == '__main__':

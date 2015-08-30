@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask_testing import TestCase
-
-from backend import backend, db
+from newsletter import db
+from backend import backend
 
 
 class BaseTestCase(TestCase):
