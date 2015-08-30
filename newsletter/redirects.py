@@ -11,7 +11,7 @@ class Redirect(db.Model):
     Redirect class represents a mapping unique ID -> URL
     where ID is a unique identifier which is used as tracking id in url
     Example:
-        http://domain.tld/u/9bc80de6c575407b99891ff15d431259/
+        http://domain.tld/9bc80de6c575407b99891ff15d431259/
         id is 9bc80de6c575407b99891ff15d431259
 
     URL is destination url where original request should be redirected.

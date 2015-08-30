@@ -3,8 +3,7 @@ from newsletter.url import LetterUrl
 from newsletter import db
 from backend import backend
 
-#from uuid import uuid4
-
+# pre-defined uuids are used to fill the database
 ids = [
     '566ed35009584a42ae0898cb7d2c7659',
     'e79512f9051a4f8ea9d51824600afe3a',
@@ -18,7 +17,7 @@ ids = [
     '29f098661abf4ecd97adf77eb588a694',
     'c7de9d8aef2c43f2830df173e6b3be25',
     '9be5b61ceb5746e99dca6b2e7168929c',
-    ]
+]
 with backend.app_context():
     db.create_all()
     newsletter = LetterUrl()
@@ -37,4 +36,3 @@ with backend.app_context():
 
     print newsletter.url(uuid=ids.pop(), email='n13u1@testdomain.tld', url='http://todois.com', letter_id=13)
     print newsletter.url(uuid=ids.pop(), letter_id=13)
-

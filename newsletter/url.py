@@ -3,31 +3,29 @@ from newsletter import db
 from newsletter.redirect import Redirect
 from newsletter import EMPTY_GIF_URL
 from uuid import uuid4
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import IntegrityError
-
-
-# http://skien.cc/blog/2014/02/06/sqlalchemy-and-race-conditions-follow-up/
-def get_one_or_create(session,
-                      model,
-                      create_method='',
-                      create_method_kwargs=None,
-                      **kwargs):
-    try:
-        return session.query(model).filter_by(**kwargs).one(), True
-    except NoResultFound:
-        kwargs.update(create_method_kwargs or {})
-        created = getattr(model, create_method, model)(**kwargs)
-        try:
-            session.add(created)
-            session.flush()
-            return created, False
-        except IntegrityError:
-            session.rollback()
-            return session.query(model).filter_by(**kwargs).one(), True
 
 
 class LetterUrl(object):
+    """
+    LetterURL class provides function to get unique url for email campaigns.
+    based on the original url or a newsletter-specific url of tracking pixel.
+
+    `__init__` method takes one optional argument
+        `base_url` is used to build a full tracking url
+
+    `url` method is used  get unique url for emails
+
+    `letter_id` is mandatory and it should be unique for every email campaign
+
+    an unique url for email
+        LetterURL.url(letter_id, email, url)
+
+    if only `letter_id` is specified newsletter-specific url will be created
+        LetterURL.url(letter_id)
+
+
+    `uuid` is optional if it is not specified a new one will be generated based on UUID
+    """
     def __init__(self, base_url="http://localhost/"):
         if not base_url.endswith('/'):
             base_url += '/'
