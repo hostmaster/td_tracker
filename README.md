@@ -30,6 +30,7 @@ Please see possible queries in [Reports](REPORTS.md)
 * Every url request causes 1 read query and 1 write request to the database
 * Backend blocks on requests to database
 * Tracking pixel url is the same always, do not need to query DB
+* Test coverage could be better
 
 ### Scaling
 
