@@ -2,8 +2,8 @@
 
 * track numbers of particular email newsletter opens with at least 1 hour granularity;
 
-letter_id == 11
-```
+Newsletter id is 11
+```SQL
 SELECT uuid, timestamp, count(uuid) from clicks
 WHERE uuid in (SELECT uuid FROM redirects WHERE letter_id == 11 and email is NULL)
 AND timestamp >= datetime('now', '-1 hour')
