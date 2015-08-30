@@ -10,7 +10,7 @@ AND timestamp >= datetime('now', '-1 hour')
 ```
 
 * track numbers of particular URL "clicks" with at least 1 hour granularity;
-'''
+```
 SELECT uuid, timestamp, count(uuid) from clicks
 WHERE uuid in (SELECT uuid FROM redirects WHERE url == 'http://goo.gl')
 AND timestamp >= datetime('now', '-1 hour')
@@ -21,7 +21,7 @@ AND timestamp >= datetime('now', '-1 hour')
 SELECT DISTINCT email from redirects
 WHERE uuid in (SELECT uuid FROM clicks WHERE timestamp >= datetime('now', '-1 hour'))
 AND url == 'http://goo.gl'
-'''
+```
 
 * answer the question "does user with email X followed an URL Y?"
 ```
